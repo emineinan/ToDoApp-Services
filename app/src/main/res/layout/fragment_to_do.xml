@@ -59,7 +59,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewDescription" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/buttonAddTask"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -71,7 +71,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextDescription" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/textViewActive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -80,7 +80,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonAddTask" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -93,7 +93,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3">
+        app:layout_constraintTop_toBottomOf="@+id/textViewActive">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
