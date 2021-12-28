@@ -25,7 +25,7 @@ class ToDoFragment : Fragment() {
     ): View? {
         _binding = FragmentToDoBinding.inflate(inflater, container, false)
 
-        setAdapter()
+        //setAdapter()
 
         toDoViewModel.getAllData.observe(viewLifecycleOwner, { data ->
             adapter.setData(data)
@@ -52,10 +52,10 @@ class ToDoFragment : Fragment() {
         binding.editTextDescription.text.clear()
     }
 
-    private fun setAdapter() {
+    /*private fun setAdapter() {
         val recyclerView = binding.recyclerView
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-    }
+    }*/
 
 }
