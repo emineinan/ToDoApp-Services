@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class ToDoData(
     @PrimaryKey(autoGenerate = true)
     var id: Int,
+    val viewType: Int,
     var title: String,
     var description: String
 )

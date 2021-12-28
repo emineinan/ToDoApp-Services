@@ -13,6 +13,8 @@
         <entry key="..\:/Users/LENOVO/Desktop/ToDoApp-Services/app/src/main/res/layout/activity_main.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/LENOVO/Desktop/ToDoApp-Services/app/src/main/res/layout/fragment_to_do.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/LENOVO/Desktop/ToDoApp-Services/app/src/main/res/layout/row_item.xml" value="0.25364583333333335" />
+        <entry key="..\:/Users/LENOVO/Desktop/ToDoApp-Services/app/src/main/res/layout/row_item_active.xml" value="0.23278985507246377" />
+        <entry key="..\:/Users/LENOVO/Desktop/ToDoApp-Services/app/src/main/res/layout/row_item_done.xml" value="0.23278985507246377" />
       </map>
     </option>
   </component>

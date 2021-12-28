@@ -22,10 +22,10 @@ class ToDoFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentToDoBinding.inflate(inflater, container, false)
 
-        //setAdapter()
+        setAdapter()
 
         toDoViewModel.getAllData.observe(viewLifecycleOwner, { data ->
             adapter.setData(data)
@@ -41,7 +41,7 @@ class ToDoFragment : Fragment() {
     private fun addTaskToDatabase() {
         val title = binding.editTextTitle.text.toString()
         val description = binding.editTextDescription.text.toString()
-        val newTask = ToDoData(0, title, description)
+        val newTask = ToDoData(0, 1, title, description)
         toDoViewModel.insertData(newTask)
 
         clearInputFields()
@@ -52,10 +52,10 @@ class ToDoFragment : Fragment() {
         binding.editTextDescription.text.clear()
     }
 
-    /*private fun setAdapter() {
-        val recyclerView = binding.recyclerView
+    private fun setAdapter() {
+        val recyclerView = binding.recyclerViewTasks
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-    }*/
+    }
 
 }
