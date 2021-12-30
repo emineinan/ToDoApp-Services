@@ -17,7 +17,7 @@ class ToDoFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val toDoViewModel: ToDoViewModel by viewModels()
-    private val adapter: ToDoListAdapter by lazy { ToDoListAdapter(toDoViewModel) }
+    private val adapter: ToDoListAdapter by lazy { ToDoListAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,7 +43,6 @@ class ToDoFragment : Fragment() {
         val description = binding.editTextDescription.text.toString()
         val newTask = ToDoData(0, 1, title, description)
         toDoViewModel.insertData(newTask)
-
         clearInputFields()
     }
 
@@ -56,6 +55,12 @@ class ToDoFragment : Fragment() {
         val recyclerView = binding.recyclerViewTasks
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        adapter.apply {
+            onItemClicked = { currentItem ->
+                toDoViewModel.deleteOrUpdateData(currentItem)
+            }
+        }
     }
 
 }

@@ -22,9 +22,14 @@ class ToDoViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun deleteData(toDoData: ToDoData) {
+    fun deleteOrUpdateData(toDoData: ToDoData) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteData(toDoData)
+            if (toDoData.viewType == 1) {
+                toDoData.viewType =2
+                repository.updateData(toDoData)
+            } else {
+                repository.deleteData(toDoData)
+            }
         }
     }
 }

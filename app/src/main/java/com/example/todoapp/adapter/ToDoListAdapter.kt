@@ -8,9 +8,8 @@ import com.example.todoapp.data.model.ToDoData
 import com.example.todoapp.databinding.RowItemActiveBinding
 import com.example.todoapp.databinding.RowItemDoneBinding
 import com.example.todoapp.util.ToDoDiffUtil
-import com.example.todoapp.viewmodel.ToDoViewModel
 
-class ToDoListAdapter(private val toDoViewModel: ToDoViewModel) :
+class ToDoListAdapter(var onItemClicked: ((item: ToDoData) -> Unit?)? = null) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -65,19 +64,18 @@ class ToDoListAdapter(private val toDoViewModel: ToDoViewModel) :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val currentItem = dataList[position]
+
         if (currentItem.viewType == VIEW_TYPE_ACTIVE) {
             (holder as MyViewHolderActive).bind(currentItem)
 
             holder.binding.imageViewDeleteActive.setOnClickListener {
-                toDoViewModel.deleteData(currentItem)
-                setData(dataList)
+                onItemClicked?.invoke(currentItem)
             }
         } else {
             (holder as MyViewHolderDone).bind(currentItem)
 
             holder.binding.imageViewDeleteDone.setOnClickListener {
-                toDoViewModel.deleteData(currentItem)
-                setData(dataList)
+                onItemClicked?.invoke(currentItem)
             }
         }
     }
@@ -87,9 +85,7 @@ class ToDoListAdapter(private val toDoViewModel: ToDoViewModel) :
     }
 
     fun setData(newList: List<ToDoData>) {
-        val toDoDiffUtil = ToDoDiffUtil(dataList, newList)
-        val toDoDiffResult = DiffUtil.calculateDiff(toDoDiffUtil)
         this.dataList = newList
-        toDoDiffResult.dispatchUpdatesTo(this)
+        notifyDataSetChanged()
     }
 }
