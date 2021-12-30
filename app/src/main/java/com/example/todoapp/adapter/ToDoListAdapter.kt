@@ -52,6 +52,10 @@ class ToDoListAdapter(private val toDoViewModel: ToDoViewModel) :
         }
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return dataList[position].viewType
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == VIEW_TYPE_ACTIVE) {
             return MyViewHolderActive.from(parent)
