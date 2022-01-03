@@ -2,24 +2,23 @@ package com.example.todoapp.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.todoapp.R
 import com.example.todoapp.data.model.ToDoData
-import com.example.todoapp.databinding.RowItemActiveBinding
-import com.example.todoapp.databinding.RowItemDoneBinding
-import com.example.todoapp.util.ToDoDiffUtil
+import com.example.todoapp.databinding.HeaderItemBinding
+import com.example.todoapp.databinding.RowItemBinding
 
 class ToDoListAdapter(var onItemClicked: ((item: ToDoData) -> Unit?)? = null) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
+        const val VIEW_TYPE_HEADER = 0
         const val VIEW_TYPE_ACTIVE = 1
-        const val VIEW_TYPE_DONE = 2
     }
 
     var dataList = emptyList<ToDoData>()
 
-    class MyViewHolderActive(val binding: RowItemActiveBinding) :
+    class MyViewHolderActiveOrDone(val binding: RowItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(toDoData: ToDoData) {
             binding.toDoData = toDoData
@@ -27,27 +26,26 @@ class ToDoListAdapter(var onItemClicked: ((item: ToDoData) -> Unit?)? = null) :
         }
 
         companion object {
-            fun from(parent: ViewGroup): MyViewHolderActive {
+            fun from(parent: ViewGroup): MyViewHolderActiveOrDone {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = RowItemActiveBinding.inflate(layoutInflater, parent, false)
-                return MyViewHolderActive(binding)
+                val binding = RowItemBinding.inflate(layoutInflater, parent, false)
+                return MyViewHolderActiveOrDone(binding)
             }
         }
     }
 
-    class MyViewHolderDone(val binding: RowItemDoneBinding) :
+    class MyViewHolderHeader(val binding: HeaderItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(toDoData: ToDoData) {
-            binding.toDoData = toDoData
-            binding.executePendingBindings()
+        companion object {
+            fun from(parent: ViewGroup): MyViewHolderHeader {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = HeaderItemBinding.inflate(layoutInflater, parent, false)
+                return MyViewHolderHeader(binding)
+            }
         }
 
-        companion object {
-            fun from(parent: ViewGroup): MyViewHolderDone {
-                val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = RowItemDoneBinding.inflate(layoutInflater, parent, false)
-                return MyViewHolderDone(binding)
-            }
+        fun bind(toDoData: ToDoData) {
+            binding.toDoData = toDoData
         }
     }
 
@@ -57,26 +55,22 @@ class ToDoListAdapter(var onItemClicked: ((item: ToDoData) -> Unit?)? = null) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == VIEW_TYPE_ACTIVE) {
-            return MyViewHolderActive.from(parent)
+            return MyViewHolderActiveOrDone.from(parent)
         }
-        return MyViewHolderDone.from(parent)
+        return MyViewHolderHeader.from(parent)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val currentItem = dataList[position]
 
         if (currentItem.viewType == VIEW_TYPE_ACTIVE) {
-            (holder as MyViewHolderActive).bind(currentItem)
+            (holder as MyViewHolderActiveOrDone).bind(currentItem)
 
-            holder.binding.imageViewDeleteActive.setOnClickListener {
+            holder.binding.imageViewDelete.setOnClickListener {
                 onItemClicked?.invoke(currentItem)
             }
         } else {
-            (holder as MyViewHolderDone).bind(currentItem)
-
-            holder.binding.imageViewDeleteDone.setOnClickListener {
-                onItemClicked?.invoke(currentItem)
-            }
+            (holder as MyViewHolderHeader).bind(currentItem)
         }
     }
 

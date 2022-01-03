@@ -9,4 +9,6 @@
     <string name="add_task">ADD TASK</string>
     <string name="active">Active</string>
     <string name="todo">TODO</string>
+    <string name="header_active">ACTIVE</string>
+    <string name="header_done">DONE</string>
 </resources>

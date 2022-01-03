@@ -41,7 +41,7 @@ class ToDoFragment : Fragment() {
     private fun addTaskToDatabase() {
         val title = binding.editTextTitle.text.toString()
         val description = binding.editTextDescription.text.toString()
-        val newTask = ToDoData(0, 1, title, description)
+        val newTask = ToDoData(0, 1, true, title, description)
         toDoViewModel.insertData(newTask)
         clearInputFields()
     }

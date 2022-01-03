@@ -24,8 +24,8 @@ class ToDoViewModel(application: Application) : AndroidViewModel(application) {
 
     fun deleteOrUpdateData(toDoData: ToDoData) {
         viewModelScope.launch(Dispatchers.IO) {
-            if (toDoData.viewType == 1) {
-                toDoData.viewType =2
+            if (toDoData.isActive) {
+                toDoData.isActive = false
                 repository.updateData(toDoData)
             } else {
                 repository.deleteData(toDoData)
