@@ -78,8 +78,16 @@ class ToDoListAdapter(var onItemClicked: ((item: ToDoData) -> Unit?)? = null) :
         return dataList.size
     }
 
-    fun setData(newList: List<ToDoData>) {
-        this.dataList = newList
+    fun divideListsIntoGroups(list: List<ToDoData>): List<ToDoData> {
+        val uncheckedItems = list.filter { it.isActive }
+        val checkedItems = list.filter { !it.isActive }
+        val headerItem = list.filter { it.viewType == VIEW_TYPE_HEADER }
+
+        return headerItem + uncheckedItems + headerItem + checkedItems
+    }
+
+    fun setData(list: List<ToDoData>) {
+        this.dataList = list
         notifyDataSetChanged()
     }
 }
