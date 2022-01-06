@@ -10,8 +10,8 @@ import com.example.todoapp.data.model.ToDoData
 import com.example.todoapp.databinding.HeaderItemBinding
 import com.example.todoapp.databinding.RowItemBinding
 
-private val ITEM_VIEW_TYPE_HEADER = 0
-private val ITEM_VIEW_TYPE_ITEM = 1
+private const val ITEM_VIEW_TYPE_HEADER = 0
+private const val ITEM_VIEW_TYPE_ITEM = 1
 
 class ToDoListAdapter(var onItemClicked: ((item: ToDoData) -> Unit?)? = null) :
     ListAdapter<DataItem, RecyclerView.ViewHolder>(ToDoDataDiffCallback()) {
