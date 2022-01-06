@@ -62,6 +62,7 @@ class ToDoListAdapter(var onItemClicked: ((item: ToDoData) -> Unit?)? = null) :
 
     class HeaderViewHolder(val binding: HeaderItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
         companion object {
             fun from(parent: ViewGroup): HeaderViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
@@ -72,9 +73,14 @@ class ToDoListAdapter(var onItemClicked: ((item: ToDoData) -> Unit?)? = null) :
     }
 
     fun addHeaderAndSubmitList(list: List<ToDoData>?) {
+        val uncheckedItems = list?.filter { it.isActive }
+        val checkedItems = list?.filter { !it.isActive }
+
         val items = when (list) {
             null -> listOf(DataItem.Header)
-            else -> listOf(DataItem.Header) + list.map { DataItem.ToDoDataItem(it) }
+            else -> listOf(DataItem.Header) + uncheckedItems!!.map { DataItem.ToDoDataItem(it) } + listOf(
+                DataItem.Header
+            ) + checkedItems!!.map { DataItem.ToDoDataItem(it) }
         }
         submitList(items)
     }
