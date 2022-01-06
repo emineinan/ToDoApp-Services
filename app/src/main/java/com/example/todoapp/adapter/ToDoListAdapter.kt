@@ -26,6 +26,15 @@ class ToDoListAdapter(var onItemClicked: ((item: ToDoData) -> Unit?)? = null) :
                     onItemClicked?.invoke(toDoDataItem.toDoData)
                 }
             }
+
+            is HeaderViewHolder -> {
+                val header = getItem(position) as DataItem.Header
+                if (header.isActive) {
+                    holder.binding.textViewHeader.text = "ACTIVE"
+                } else {
+                    holder.binding.textViewHeader.text = "DONE"
+                }
+            }
         }
     }
 
@@ -77,9 +86,13 @@ class ToDoListAdapter(var onItemClicked: ((item: ToDoData) -> Unit?)? = null) :
         val checkedItems = list?.filter { !it.isActive }
 
         val items = when (list) {
-            null -> listOf(DataItem.Header)
-            else -> listOf(DataItem.Header) + uncheckedItems!!.map { DataItem.ToDoDataItem(it) } + listOf(
-                DataItem.Header
+            null -> listOf(DataItem.Header(true))
+            else -> listOf(DataItem.Header(true)) + uncheckedItems!!.map {
+                DataItem.ToDoDataItem(
+                    it
+                )
+            } + listOf(
+                DataItem.Header(false)
             ) + checkedItems!!.map { DataItem.ToDoDataItem(it) }
         }
         submitList(items)
@@ -100,7 +113,7 @@ class ToDoListAdapter(var onItemClicked: ((item: ToDoData) -> Unit?)? = null) :
             override val id = toDoData.id.toLong()
         }
 
-        object Header : DataItem() {
+        data class Header(val isActive: Boolean) : DataItem() {
             override val id = Long.MIN_VALUE
         }
 
