@@ -27,23 +27,8 @@ class ToDoFragment : Fragment() {
 
         setAdapter()
 
-
         toDoViewModel.getAllData.observe(viewLifecycleOwner, { data ->
-            val uncheckedItems = data.filter { it.isActive }
-            val checkedItems = data.filter { !it.isActive }
-
-            if (uncheckedItems.isEmpty()) {
-                val headerActive = ToDoData(0, 0, "ACTIVE", true, "", "")
-                toDoViewModel.insertData(headerActive)
-            }/* else if (uncheckedItems.isNotEmpty() && checkedItems.isEmpty()) {
-                val headerActive = ToDoData(0, 0, "DONE", true, "", "")
-                toDoViewModel.insertData(headerActive)
-                adapter.setData(data)
-            } else {
-                adapter.setData(data)
-            }*/
-            adapter.setData(data)
-
+            adapter.addHeaderAndSubmitList(data)
         })
 
         binding.buttonAddTask.setOnClickListener {
@@ -56,7 +41,7 @@ class ToDoFragment : Fragment() {
     private fun addTaskToDatabase() {
         val title = binding.editTextTitle.text.toString()
         val description = binding.editTextDescription.text.toString()
-        val newTask = ToDoData(0, 1, "", true, title, description)
+        val newTask = ToDoData(0, true, title, description)
         toDoViewModel.insertData(newTask)
 
         clearInputFields()
