@@ -3,7 +3,6 @@ package com.example.todoapp.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.todoapp.R
 import com.example.todoapp.data.model.ToDoData
 import com.example.todoapp.databinding.HeaderItemBinding
 import com.example.todoapp.databinding.RowItemBinding

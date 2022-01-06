@@ -8,6 +8,7 @@ data class ToDoData(
     @PrimaryKey(autoGenerate = true)
     var id: Int,
     var viewType: Int,
+    var headerTitle: String,
     var isActive: Boolean,
     var title: String,
     var description: String
