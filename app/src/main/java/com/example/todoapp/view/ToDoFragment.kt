@@ -1,5 +1,8 @@
 package com.example.todoapp.view
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,9 +10,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.todoapp.R
 import com.example.todoapp.adapter.ToDoListAdapter
 import com.example.todoapp.data.model.ToDoData
 import com.example.todoapp.databinding.FragmentToDoBinding
+import com.example.todoapp.viewmodel.ServiceViewModel
 import com.example.todoapp.viewmodel.ToDoViewModel
 
 class ToDoFragment : Fragment() {
@@ -17,6 +22,7 @@ class ToDoFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val toDoViewModel: ToDoViewModel by viewModels()
+    private val serviceViewModel: ServiceViewModel by viewModels()
     private val adapter: ToDoListAdapter by lazy { ToDoListAdapter() }
 
     override fun onCreateView(
@@ -34,6 +40,19 @@ class ToDoFragment : Fragment() {
         binding.buttonAddTask.setOnClickListener {
             addTaskToDatabase()
         }
+
+        // call createChannel
+        binding.switchActiveOrPassive.setOnCheckedChangeListener { view, ischecked ->
+            if (ischecked) {
+                serviceViewModel.startToDoApp()
+            }
+        }
+
+        createChannel(
+            getString(R.string.todo_notification_channel_id),
+            getString(R.string.todo_notification_channel_name)
+        )
+
 
         return binding.root
     }
@@ -61,6 +80,22 @@ class ToDoFragment : Fragment() {
             onItemClicked = { currentItem ->
                 toDoViewModel.deleteOrUpdateData(currentItem)
             }
+        }
+    }
+
+    //Service
+    private fun createChannel(channelId: String, channelName: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel = NotificationChannel(
+                channelId,
+                channelName,
+                NotificationManager.IMPORTANCE_LOW
+            ).apply {
+                setShowBadge(false)
+            }
+            val notificationManager =
+                requireActivity().getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(notificationChannel)
         }
     }
 
