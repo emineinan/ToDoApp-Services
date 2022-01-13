@@ -14,7 +14,7 @@ import com.example.todoapp.R
 import com.example.todoapp.adapter.ToDoListAdapter
 import com.example.todoapp.data.model.ToDoData
 import com.example.todoapp.databinding.FragmentToDoBinding
-import com.example.todoapp.viewmodel.ServiceViewModel
+import com.example.todoapp.databinding.ToDoOverlayViewBinding
 import com.example.todoapp.viewmodel.ToDoViewModel
 
 class ToDoFragment : Fragment() {
@@ -22,9 +22,9 @@ class ToDoFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val toDoViewModel: ToDoViewModel by viewModels()
-    private val serviceViewModel: ServiceViewModel by viewModels()
     private val adapter: ToDoListAdapter by lazy { ToDoListAdapter() }
 
+    private val overlayToDoBinding= ToDoOverlayViewBinding.inflate(layoutInflater) // accessing textView, buttons, editTexts
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,18 +45,26 @@ class ToDoFragment : Fragment() {
         // call createChannel
         binding.switchActiveOrPassive.setOnCheckedChangeListener { view, isChecked ->
             if (isChecked) {
-                serviceViewModel.startToDoAppNotification()
+                startToDoService()
             } else {
-                serviceViewModel.stopToDoAppNotification()
+                stopToDoService()
             }
         }
 
-        createChannel(
+        /*createChannel(
             getString(R.string.todo_notification_channel_id),
             getString(R.string.todo_notification_channel_name)
-        )
+        )*/
 
         return binding.root
+    }
+
+    private fun stopToDoService() {
+        TODO("Not yet implemented")
+    }
+
+    private fun startToDoService() {
+        TODO("Not yet implemented")
     }
 
     private fun addTaskToDatabase() {

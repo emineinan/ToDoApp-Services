@@ -5,9 +5,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.content.ContextCompat
-import com.example.todoapp.R
-import com.example.todoapp.service.ToDoService
-import com.example.todoapp.util.sendNotification
 
 class ToDoReceiver : BroadcastReceiver() {
 
