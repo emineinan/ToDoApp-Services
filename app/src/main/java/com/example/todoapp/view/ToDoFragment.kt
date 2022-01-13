@@ -25,6 +25,7 @@ class ToDoFragment : Fragment() {
     private val serviceViewModel: ServiceViewModel by viewModels()
     private val adapter: ToDoListAdapter by lazy { ToDoListAdapter() }
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,9 +43,11 @@ class ToDoFragment : Fragment() {
         }
 
         // call createChannel
-        binding.switchActiveOrPassive.setOnCheckedChangeListener { view, ischecked ->
-            if (ischecked) {
-                serviceViewModel.startToDoApp()
+        binding.switchActiveOrPassive.setOnCheckedChangeListener { view, isChecked ->
+            if (isChecked) {
+                serviceViewModel.startToDoAppNotification()
+            } else {
+                serviceViewModel.stopToDoAppNotification()
             }
         }
 
@@ -52,7 +55,6 @@ class ToDoFragment : Fragment() {
             getString(R.string.todo_notification_channel_id),
             getString(R.string.todo_notification_channel_name)
         )
-
 
         return binding.root
     }

@@ -10,11 +10,19 @@ import com.example.todoapp.util.sendNotification
 class ServiceViewModel(private val app: Application) : AndroidViewModel(app) {
 
     //get an instance of NotificationManager and call sendNotification
-    fun startToDoApp() {
+   fun startToDoAppNotification() {
         val notificationManager = ContextCompat.getSystemService(
             app,
             NotificationManager::class.java
         ) as NotificationManager
         notificationManager.sendNotification(app.getString(R.string.todo_task_ready), app)
+    }
+
+    fun stopToDoAppNotification() {
+        val notificationManager = ContextCompat.getSystemService(
+            app,
+            NotificationManager::class.java
+        ) as NotificationManager
+        notificationManager.cancelAll()
     }
 }

@@ -16,4 +16,5 @@
     <string name="todo_task_ready">Tab to add todo note.</string>
     <string name="notification_title">TodoApp</string>
     <string name="todo_app_running">TodoApp is running...</string>
+    <string name="exit">Exit</string>
 </resources>

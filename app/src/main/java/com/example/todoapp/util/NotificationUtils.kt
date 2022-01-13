@@ -2,14 +2,17 @@ package com.example.todoapp.util
 
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.app.PendingIntent.FLAG_UPDATE_CURRENT
+import android.app.PendingIntent.*
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.example.todoapp.MainActivity
 import com.example.todoapp.R
+import com.example.todoapp.receiver.ToDoReceiver
 
 private const val NOTIFICATION_ID = 0
+private const val REQUEST_CODE = 0
+private const val FLAGS = 0
 
 fun NotificationManager.sendNotification(messageBody: String, applicationContext: Context) {
 
@@ -20,6 +23,15 @@ fun NotificationManager.sendNotification(messageBody: String, applicationContext
         NOTIFICATION_ID,
         contentIntent,
         FLAG_UPDATE_CURRENT
+    )
+
+    val exitIntent = Intent(applicationContext, ToDoReceiver::class.java)
+    exitIntent.putExtra("notificationId", NOTIFICATION_ID)
+    val exitPendingIntent: PendingIntent = PendingIntent.getBroadcast(
+        applicationContext,
+        REQUEST_CODE,
+        exitIntent,
+        FLAG_CANCEL_CURRENT
     )
 
     val builder = NotificationCompat.Builder(  // get an instance of NotificationCompat.Builder
@@ -33,6 +45,13 @@ fun NotificationManager.sendNotification(messageBody: String, applicationContext
 
         .setContentIntent(contentPendingIntent)
         .setAutoCancel(true)
+
+        .addAction(
+            R.drawable.ic_check,
+            applicationContext.getString(R.string.exit),
+            exitPendingIntent
+        )
+
 
     //call notify to send the notification
     notify(NOTIFICATION_ID, builder.build())
