@@ -54,16 +54,11 @@ class ToDoFragment : Fragment() {
     }
 
     private fun stopToDoService() {
-        val intent =
-            Intent(requireContext(), ToDoService::class.java) // Build the intent for the service
-        requireContext().stopService(intent)
+        ToDoService.stopService(requireContext())
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun startToDoService() {
-        val intent =
-            Intent(requireContext(), ToDoService::class.java) // Build the intent for the service
-        requireContext().startForegroundService(intent)
+        ToDoService.startService(requireContext())
     }
 
     private fun addTaskToDatabase() {
