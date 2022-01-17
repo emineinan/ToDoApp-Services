@@ -13,7 +13,7 @@
     <string name="header_done">DONE</string>
     <string name="todo_notification_channel_id">todo_channel</string>
     <string name="todo_notification_channel_name">ToDoApp</string>
-    <string name="todo_task_ready">Tab to add todo note.</string>
+    <string name="todo_app_title">Tab to add todo note.</string>
     <string name="notification_title">TodoApp</string>
     <string name="todo_app_running">TodoApp is running...</string>
     <string name="exit">Exit</string>

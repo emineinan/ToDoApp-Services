@@ -15,4 +15,5 @@ class ToDoOverlayView @JvmOverloads constructor(
     init {
         inflate(context, R.layout.to_do_overlay_view, this)
     }
+
 }

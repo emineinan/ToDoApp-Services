@@ -1,21 +1,22 @@
 package com.example.todoapp.view
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.todoapp.R
 import com.example.todoapp.adapter.ToDoListAdapter
 import com.example.todoapp.data.model.ToDoData
 import com.example.todoapp.databinding.FragmentToDoBinding
 import com.example.todoapp.databinding.ToDoOverlayViewBinding
+import com.example.todoapp.service.ToDoService
 import com.example.todoapp.viewmodel.ToDoViewModel
+
 
 class ToDoFragment : Fragment() {
     private var _binding: FragmentToDoBinding? = null
@@ -24,8 +25,7 @@ class ToDoFragment : Fragment() {
     private val toDoViewModel: ToDoViewModel by viewModels()
     private val adapter: ToDoListAdapter by lazy { ToDoListAdapter() }
 
-    private val overlayToDoBinding= ToDoOverlayViewBinding.inflate(layoutInflater) // accessing textView, buttons, editTexts
-
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,7 +42,6 @@ class ToDoFragment : Fragment() {
             addTaskToDatabase()
         }
 
-        // call createChannel
         binding.switchActiveOrPassive.setOnCheckedChangeListener { view, isChecked ->
             if (isChecked) {
                 startToDoService()
@@ -51,20 +50,20 @@ class ToDoFragment : Fragment() {
             }
         }
 
-        /*createChannel(
-            getString(R.string.todo_notification_channel_id),
-            getString(R.string.todo_notification_channel_name)
-        )*/
-
         return binding.root
     }
 
     private fun stopToDoService() {
-        TODO("Not yet implemented")
+        val intent =
+            Intent(requireContext(), ToDoService::class.java) // Build the intent for the service
+        requireContext().stopService(intent)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun startToDoService() {
-        TODO("Not yet implemented")
+        val intent =
+            Intent(requireContext(), ToDoService::class.java) // Build the intent for the service
+        requireContext().startForegroundService(intent)
     }
 
     private fun addTaskToDatabase() {
@@ -90,22 +89,6 @@ class ToDoFragment : Fragment() {
             onItemClicked = { currentItem ->
                 toDoViewModel.deleteOrUpdateData(currentItem)
             }
-        }
-    }
-
-    //Service
-    private fun createChannel(channelId: String, channelName: String) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationChannel = NotificationChannel(
-                channelId,
-                channelName,
-                NotificationManager.IMPORTANCE_LOW
-            ).apply {
-                setShowBadge(false)
-            }
-            val notificationManager =
-                requireActivity().getSystemService(NotificationManager::class.java)
-            notificationManager.createNotificationChannel(notificationChannel)
         }
     }
 
