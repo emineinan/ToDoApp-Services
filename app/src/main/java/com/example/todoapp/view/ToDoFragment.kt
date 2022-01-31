@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +17,9 @@ import com.example.todoapp.databinding.FragmentToDoBinding
 import com.example.todoapp.databinding.ToDoOverlayViewBinding
 import com.example.todoapp.service.ToDoService
 import com.example.todoapp.viewmodel.ToDoViewModel
+import androidx.core.content.ContextCompat.startForegroundService
+import androidx.core.content.ContextCompat.startForegroundService
+import androidx.core.content.ContextCompat.startForegroundService
 
 
 class ToDoFragment : Fragment() {
@@ -54,11 +58,15 @@ class ToDoFragment : Fragment() {
     }
 
     private fun stopToDoService() {
-        ToDoService.stopService(requireContext())
+        val intent = Intent(requireContext(), ToDoService::class.java)
+        intent.action = ToDoService.ACTION_STOP_FOREGROUND_SERVICE
+        startForegroundService(requireContext(), intent)
     }
 
     private fun startToDoService() {
-        ToDoService.startService(requireContext())
+        val intent = Intent(requireContext(), ToDoService::class.java)
+        intent.action = ToDoService.ACTION_START_FOREGROUND_SERVICE
+        startForegroundService(requireContext(), intent)
     }
 
     private fun addTaskToDatabase() {

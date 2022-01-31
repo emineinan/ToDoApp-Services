@@ -17,4 +17,9 @@
     <string name="notification_title">TodoApp</string>
     <string name="todo_app_running">TodoApp is running...</string>
     <string name="exit">Exit</string>
+    <string name="add_task_overlay">Add Task</string>
+    <string name="task_title_overlay">Task Title</string>
+    <string name="task_description_overlay">Task Description</string>
+    <string name="cancel_overlay">CANCEL</string>
+    <string name="add_overlay">ADD</string>
 </resources>
