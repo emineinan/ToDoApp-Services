@@ -9,9 +9,9 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import com.example.todoapp.Constants.Companion.CODE_EXIT_INTENT
 import com.example.todoapp.Constants.Companion.CODE_FOREGROUND_SERVICE
-import com.example.todoapp.Constants.Companion.CODE_NOTE_INTENT
+import com.example.todoapp.Constants.Companion.CODE_ADD_TASK_INTENT
 import com.example.todoapp.Constants.Companion.INTENT_COMMAND_EXIT
-import com.example.todoapp.Constants.Companion.INTENT_COMMAND_NOTE
+import com.example.todoapp.Constants.Companion.INTENT_COMMAND_ADD_TASK
 import com.example.todoapp.Constants.Companion.NOTIFICATION_CHANNEL_GENERAL
 import com.example.todoapp.R
 import com.example.todoapp.util.drawOverOtherAppsEnabled
@@ -38,14 +38,14 @@ class ToDoService : Service() {
         exitIntent.action = INTENT_COMMAND_EXIT
 
         val noteIntent = Intent(this, ToDoService::class.java)
-        noteIntent.action = INTENT_COMMAND_NOTE
+        noteIntent.action = INTENT_COMMAND_ADD_TASK
 
         val exitPendingIntent = PendingIntent.getService(
             this, CODE_EXIT_INTENT, exitIntent, 0
         )
 
         val notePendingIntent = PendingIntent.getService(
-            this, CODE_NOTE_INTENT, noteIntent, 0
+            this, CODE_ADD_TASK_INTENT, noteIntent, 0
         )
 
         // From Android O, it's necessary to create a notification channel first.
@@ -104,7 +104,7 @@ class ToDoService : Service() {
         showNotification()
 
         // Show the floating window for adding a new note.
-        if (command == INTENT_COMMAND_NOTE) {
+        if (command == INTENT_COMMAND_ADD_TASK) {
             if (!drawOverOtherAppsEnabled()) {
                 startPermissionActivity()
             } else {

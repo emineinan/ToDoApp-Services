@@ -8,7 +8,7 @@ import android.provider.Settings
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.example.todoapp.Constants.Companion.INTENT_COMMAND_NOTE
+import com.example.todoapp.Constants.Companion.INTENT_COMMAND_ADD_TASK
 import com.example.todoapp.databinding.ActivityPermissionBinding
 import com.example.todoapp.util.drawOverOtherAppsEnabled
 import com.example.todoapp.util.startToDoService
@@ -67,7 +67,7 @@ class PermissionActivity : AppCompatActivity() {
             if (drawOverOtherAppsEnabled()) {
                 // The permission has been granted.
                 // Resend the last command - we have only one, so no additional logic needed.
-                startToDoService(INTENT_COMMAND_NOTE)
+                startToDoService(INTENT_COMMAND_ADD_TASK)
                 finish()
             }
         } else {
