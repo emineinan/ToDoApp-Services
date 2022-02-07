@@ -6,12 +6,10 @@ import android.os.Build
 import android.provider.Settings
 import android.widget.Toast
 import com.example.todoapp.PermissionActivity
-import com.example.todoapp.service.INTENT_COMMAND
 import com.example.todoapp.service.ToDoService
 
 fun Context.startToDoService(command: String = "") {
     val intent = Intent(this, ToDoService::class.java)
-    if (command.isNotBlank()) intent.putExtra(INTENT_COMMAND, command)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         this.startForegroundService(intent)
         Toast.makeText(this, "Service started.", Toast.LENGTH_SHORT).show()

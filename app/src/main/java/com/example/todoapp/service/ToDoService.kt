@@ -7,19 +7,16 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import com.example.todoapp.Constants.Companion.CODE_EXIT_INTENT
+import com.example.todoapp.Constants.Companion.CODE_FOREGROUND_SERVICE
+import com.example.todoapp.Constants.Companion.CODE_NOTE_INTENT
+import com.example.todoapp.Constants.Companion.INTENT_COMMAND_EXIT
+import com.example.todoapp.Constants.Companion.INTENT_COMMAND_NOTE
+import com.example.todoapp.Constants.Companion.NOTIFICATION_CHANNEL_GENERAL
 import com.example.todoapp.R
 import com.example.todoapp.util.drawOverOtherAppsEnabled
 import com.example.todoapp.util.startPermissionActivity
 import com.example.todoapp.view.ToDoOverlayView
-
-const val INTENT_COMMAND = "com.localazy.quicknote.COMMAND"
-const val INTENT_COMMAND_EXIT = "EXIT"
-const val INTENT_COMMAND_NOTE = "NOTE"
-
-private const val NOTIFICATION_CHANNEL_GENERAL = "quicknote_general"
-private const val CODE_FOREGROUND_SERVICE = 1
-private const val CODE_EXIT_INTENT = 2
-private const val CODE_NOTE_INTENT = 3
 
 class ToDoService : Service() {
 
@@ -37,13 +34,11 @@ class ToDoService : Service() {
 
         val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        val exitIntent = Intent(this, ToDoService::class.java).apply {
-            putExtra(INTENT_COMMAND, INTENT_COMMAND_EXIT)
-        }
+        val exitIntent = Intent(this, ToDoService::class.java)
+        exitIntent.action = INTENT_COMMAND_EXIT
 
-        val noteIntent = Intent(this, ToDoService::class.java).apply {
-            putExtra(INTENT_COMMAND, INTENT_COMMAND_NOTE)
-        }
+        val noteIntent = Intent(this, ToDoService::class.java)
+        noteIntent.action = INTENT_COMMAND_NOTE
 
         val exitPendingIntent = PendingIntent.getService(
             this, CODE_EXIT_INTENT, exitIntent, 0
@@ -55,7 +50,6 @@ class ToDoService : Service() {
 
         // From Android O, it's necessary to create a notification channel first.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            try {
                 with(
                     NotificationChannel(
                         NOTIFICATION_CHANNEL_GENERAL,
@@ -63,16 +57,9 @@ class ToDoService : Service() {
                         NotificationManager.IMPORTANCE_DEFAULT
                     )
                 ) {
-                    enableLights(false)
-                    setShowBadge(false)
-                    enableVibration(false)
-                    setSound(null, null)
                     lockscreenVisibility = Notification.VISIBILITY_PUBLIC
                     manager.createNotificationChannel(this)
                 }
-            } catch (ignored: Exception) {
-                // Ignore exception.
-            }
         }
 
         with(
@@ -81,7 +68,6 @@ class ToDoService : Service() {
                 NOTIFICATION_CHANNEL_GENERAL
             )
         ) {
-            setTicker(null)
             setContentTitle(getString(R.string.app_name))
             setContentText(getString(R.string.todo_app_notification_text))
             setAutoCancel(false)
@@ -103,8 +89,7 @@ class ToDoService : Service() {
 
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-
-        val command = intent.getStringExtra(INTENT_COMMAND)
+        val command = intent.action
 
         // Exit the service if we receive the EXIT command.
         // START_NOT_STICKY is important here, we don't want

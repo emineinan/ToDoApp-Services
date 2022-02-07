@@ -58,6 +58,10 @@ class ToDoOverlayView(private val context: Context) {
     private fun initWindow(): ConstraintLayout {
         binding = ToDoOverlayViewBinding.inflate(layoutInflater)
 
+        binding.buttonCancel.setOnClickListener {
+            closeOverlay()
+        }
+
         binding.buttonAdd.setOnClickListener {
             Toast.makeText(context, "Button is working", Toast.LENGTH_SHORT).show()
         }
@@ -74,7 +78,7 @@ class ToDoOverlayView(private val context: Context) {
         windowManager.addView(binding.root, windowParams)
     }
 
-    fun closeOverlay() {
+    private fun closeOverlay() {
         windowManager.removeView(binding.root)
     }
 }

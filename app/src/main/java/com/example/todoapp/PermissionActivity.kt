@@ -3,13 +3,13 @@ package com.example.todoapp
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import android.provider.Settings
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import com.example.todoapp.Constants.Companion.INTENT_COMMAND_NOTE
 import com.example.todoapp.databinding.ActivityPermissionBinding
-import com.example.todoapp.service.INTENT_COMMAND_NOTE
 import com.example.todoapp.util.drawOverOtherAppsEnabled
 import com.example.todoapp.util.startToDoService
 

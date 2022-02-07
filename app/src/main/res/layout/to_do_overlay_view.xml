@@ -4,8 +4,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:background="@color/white"
     android:layout_margin="10dp"
+    android:background="@color/white"
     android:padding="20dp">
 
     <TextView
@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/editTextOverlayTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -33,17 +33,17 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewOverlayAddTask" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName2"
+        android:id="@+id/editTextOverlayDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="@string/task_description_overlay"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/editTextTextPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/editTextOverlayTitle"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+        app:layout_constraintStart_toStartOf="@+id/editTextOverlayTitle"
+        app:layout_constraintTop_toBottomOf="@+id/editTextOverlayTitle" />
 
     <Button
         android:id="@+id/buttonCancel"
@@ -54,8 +54,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/buttonAdd"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName2"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
+        app:layout_constraintStart_toStartOf="@+id/editTextOverlayDescription"
+        app:layout_constraintTop_toBottomOf="@+id/editTextOverlayDescription" />
 
     <Button
         android:id="@+id/buttonAdd"
@@ -64,6 +64,6 @@
         android:layout_marginTop="20dp"
         android:text="@string/add_overlay"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/editTextTextPersonName2"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
+        app:layout_constraintEnd_toEndOf="@+id/editTextOverlayDescription"
+        app:layout_constraintTop_toBottomOf="@+id/editTextOverlayDescription" />
 </androidx.constraintlayout.widget.ConstraintLayout>
