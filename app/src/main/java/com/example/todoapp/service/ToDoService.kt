@@ -1,138 +1,143 @@
 package com.example.todoapp.service
 
-import android.app.PendingIntent
-import android.app.Service
+import android.app.*
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.IBinder
-import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
-import androidx.navigation.NavDeepLinkBuilder
+import androidx.core.content.ContextCompat
 import com.example.todoapp.MainActivity
 import com.example.todoapp.R
-import com.example.todoapp.R.drawable
+import com.example.todoapp.drawOverOtherAppsEnabled
+import com.example.todoapp.startPermissionActivity
+import com.example.todoapp.view.ToDoOverlayView
 
+const val INTENT_COMMAND = "com.localazy.quicknote.COMMAND"
+const val INTENT_COMMAND_EXIT = "EXIT"
+const val INTENT_COMMAND_NOTE = "NOTE"
+
+private const val NOTIFICATION_CHANNEL_GENERAL = "quicknote_general"
+private const val CODE_FOREGROUND_SERVICE = 1
+private const val CODE_EXIT_INTENT = 2
+private const val CODE_NOTE_INTENT = 3
 
 class ToDoService : Service() {
-    private val CHANNEL_ID = "ForegroundService Kotlin"
-    lateinit var contentPendingIntent: PendingIntent
-    lateinit var actionPendingIntent: PendingIntent
-
-    override fun onBind(intent: Intent): IBinder? {
-        return null
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-        Log.d(TAG_FOREGROUND_SERVICE, "My foreground service onCreate().")
-    }
-
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (intent != null) {
-            val action = intent.action
-            when (action) {
-                ACTION_START_FOREGROUND_SERVICE -> {
-                    startForegroundService()
-                    Toast.makeText(
-                        this,
-                        "Foreground service is started.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-                ACTION_STOP_FOREGROUND_SERVICE -> {
-                    stopForegroundService()
-                    Toast.makeText(
-                        this,
-                        "Foreground service is stopped.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-                ACTION_EXIT -> {
-                    stopForegroundService()
-                }
-                ACTION_PAUSE -> Toast.makeText(
-                    this,
-                    "You click Pause button.",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        }
-        return super.onStartCommand(intent, flags, startId)
-    }
-
-    fun startForegroundService() {
-        val contentIntent = Intent(this, MainActivity::class.java)
-        val contentPendingIntent = NavDeepLinkBuilder(this)
-            .setGraph(R.navigation.nav_graph)
-            .setDestination(R.id.addTaskFragment)
-            .createPendingIntent()
-
-        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Tab to add todo note.")
-            .setSmallIcon(drawable.ic_checklist)
-            .setContentIntent(contentPendingIntent)
-            .setAutoCancel(true)
 
 
-        // Add Exit button intent in notification.
-        val exitIntent = Intent(this, ToDoService::class.java)
-        exitIntent.action = ACTION_EXIT
-        val pendingExitIntent = PendingIntent.getService(this, 0, exitIntent, 0)
-        val exitAction =
-            NotificationCompat.Action(android.R.drawable.ic_media_play, "Exit", pendingExitIntent)
-        builder.addAction(exitAction)
-
-        // Build the notification.
-        val notification = builder.build()
-        // Start foreground service.
-        startForeground(1, notification)
-    }
-
-    /* Used to build and start foreground service. */
-    /*fun startForegroundService() {
-        val contentIntent = Intent(this, MainActivity::class.java)
-        val contentPendingIntent = PendingIntent.getActivity(
-            this,
-            0,
-            contentIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
-        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Tab to add todo note.")
-            .setSmallIcon(drawable.ic_checklist)
-            .setContentIntent(contentPendingIntent)
-            .setAutoCancel(true)
+    override fun onBind(intent: Intent?): IBinder? = null
 
 
-        // Add Exit button intent in notification.
-        val exitIntent = Intent(this, ToDoService::class.java)
-        exitIntent.action = ACTION_EXIT
-        val pendingExitIntent = PendingIntent.getService(this, 0, exitIntent, 0)
-        val exitAction =
-            NotificationCompat.Action(android.R.drawable.ic_media_play, "Exit", pendingExitIntent)
-        builder.addAction(exitAction)
-
-        // Build the notification.
-        val notification = builder.build()
-        // Start foreground service.
-        startForeground(1, notification)
-    }*/
-
-
-    fun stopForegroundService() {
-        // Stop foreground service and remove the notification.
-        val stopIntent = Intent(this, ToDoService::class.java)
-        this.stopService(stopIntent)
-        // Stop the foreground service.
+    /**
+     * Remove the foreground notification and stop the service.
+     */
+    private fun stopService() {
+        stopForeground(true)
         stopSelf()
     }
 
-    companion object {
-        private const val TAG_FOREGROUND_SERVICE = "FOREGROUND_SERVICE"
-        const val ACTION_START_FOREGROUND_SERVICE = "ACTION_START_FOREGROUND_SERVICE"
-        const val ACTION_STOP_FOREGROUND_SERVICE = "ACTION_STOP_FOREGROUND_SERVICE"
-        const val ACTION_PAUSE = "ACTION_PAUSE"
-        const val ACTION_EXIT = "ACTION_EXIT"
+
+    /**
+     * Create and show the foreground notification.
+     */
+    private fun showNotification() {
+
+        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        val exitIntent = Intent(this, ToDoService::class.java).apply {
+            putExtra(INTENT_COMMAND, INTENT_COMMAND_EXIT)
+        }
+
+        val noteIntent = Intent(this, ToDoService::class.java).apply {
+            putExtra(INTENT_COMMAND, INTENT_COMMAND_NOTE)
+        }
+
+        val exitPendingIntent = PendingIntent.getService(
+            this, CODE_EXIT_INTENT, exitIntent, 0
+        )
+
+        val notePendingIntent = PendingIntent.getService(
+            this, CODE_NOTE_INTENT, noteIntent, 0
+        )
+
+        // From Android O, it's necessary to create a notification channel first.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            try {
+                with(
+                    NotificationChannel(
+                        NOTIFICATION_CHANNEL_GENERAL,
+                        getString(R.string.notification_channel_general),
+                        NotificationManager.IMPORTANCE_DEFAULT
+                    )
+                ) {
+                    enableLights(false)
+                    setShowBadge(false)
+                    enableVibration(false)
+                    setSound(null, null)
+                    lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+                    manager.createNotificationChannel(this)
+                }
+            } catch (ignored: Exception) {
+                // Ignore exception.
+            }
+        }
+
+        with(
+            NotificationCompat.Builder(
+                this,
+                NOTIFICATION_CHANNEL_GENERAL
+            )
+        ) {
+            setTicker(null)
+            setContentTitle(getString(R.string.app_name))
+            setContentText("Merhaba Bildirim")
+            setAutoCancel(false)
+            setOngoing(true)
+            setWhen(System.currentTimeMillis())
+            setSmallIcon(R.drawable.ic_checklist)
+            priority = Notification.PRIORITY_DEFAULT
+            setContentIntent(notePendingIntent)
+            addAction(
+                NotificationCompat.Action(
+                    0,
+                    "Exit",
+                    exitPendingIntent
+                )
+            )
+            startForeground(CODE_FOREGROUND_SERVICE, build())
+        }
+
     }
+
+
+    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+
+        val command = intent.getStringExtra(INTENT_COMMAND)
+
+        // Exit the service if we receive the EXIT command.
+        // START_NOT_STICKY is important here, we don't want
+        // the service to be relaunched.
+        if (command == INTENT_COMMAND_EXIT) {
+            stopService()
+            return START_NOT_STICKY
+        }
+
+        // Be sure to show the notification first for all commands.
+        // Don't worry, repeated calls have no effects.
+        showNotification()
+
+        // Show the floating window for adding a new note.
+        if (command == INTENT_COMMAND_NOTE) {
+            if (!drawOverOtherAppsEnabled()) {
+                startPermissionActivity()
+            } else {
+                val toDoOverlayView = ToDoOverlayView(applicationContext)
+                toDoOverlayView.open()
+            }
+        }
+
+        return START_STICKY
+    }
+
 }
