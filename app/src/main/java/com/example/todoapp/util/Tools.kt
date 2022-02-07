@@ -5,8 +5,11 @@ import android.content.Intent
 import android.os.Build
 import android.provider.Settings
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import com.example.todoapp.PermissionActivity
+import com.example.todoapp.adapter.ToDoListAdapter
 import com.example.todoapp.service.ToDoService
+import com.example.todoapp.viewmodel.ToDoViewModel
 
 fun Context.startToDoService(command: String = "") {
     val intent = Intent(this, ToDoService::class.java)
@@ -32,7 +35,6 @@ fun Context.drawOverOtherAppsEnabled(): Boolean {
         Settings.canDrawOverlays(this)
     }
 }
-
 
 fun Context.startPermissionActivity() {
     startActivity(

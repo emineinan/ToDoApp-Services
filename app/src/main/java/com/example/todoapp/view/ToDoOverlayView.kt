@@ -1,21 +1,24 @@
 package com.example.todoapp.view
 
+import android.app.Application
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.PixelFormat
 import android.os.Build
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.WindowManager
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.example.todoapp.data.model.ToDoData
 import com.example.todoapp.databinding.ToDoOverlayViewBinding
-import android.content.res.Resources
-import android.widget.Toast
+import com.example.todoapp.viewmodel.ToDoViewModel
 
-class ToDoOverlayView(private val context: Context) {
+class ToDoOverlayView(context: Context) {
     private val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     private val layoutInflater =
         context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     private lateinit var binding: ToDoOverlayViewBinding
+    private val toDoViewModel = ToDoViewModel(context as Application)
 
     private val windowParams = WindowManager.LayoutParams(
         0,
@@ -58,16 +61,60 @@ class ToDoOverlayView(private val context: Context) {
     private fun initWindow(): ConstraintLayout {
         binding = ToDoOverlayViewBinding.inflate(layoutInflater)
 
+        binding.root.setListener {
+            if (it) {
+                enableKeyboard()
+            } else {
+                disableKeyboard()
+            }
+        }
+
         binding.buttonCancel.setOnClickListener {
             closeOverlay()
         }
 
         binding.buttonAdd.setOnClickListener {
-            Toast.makeText(context, "Button is working", Toast.LENGTH_SHORT).show()
+            addTaskToDatabase()
         }
 
         return binding.root
     }
+
+    private fun addTaskToDatabase() {
+        val title = binding.editTextOverlayTitle.text.toString()
+        val description = binding.editTextOverlayDescription.text.toString()
+        val newTask = ToDoData(0, true, title, description)
+        toDoViewModel.insertData(newTask)
+
+        clearInputFields()
+    }
+
+    private fun clearInputFields() {
+        binding.editTextOverlayTitle.text.clear()
+        binding.editTextOverlayDescription.text.clear()
+    }
+
+    private fun enableKeyboard() {
+        if (windowParams.flags and WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE != 0) {
+            windowParams.flags =
+                windowParams.flags and WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE.inv()
+            update()
+        }
+    }
+
+
+    private fun disableKeyboard() {
+        if (windowParams.flags and WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE == 0) {
+            windowParams.flags = windowParams.flags or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+            update()
+        }
+    }
+
+
+    private fun update() {
+        windowManager.updateViewLayout(binding.root, windowParams)
+    }
+
 
     init {
         initWindowParams()
