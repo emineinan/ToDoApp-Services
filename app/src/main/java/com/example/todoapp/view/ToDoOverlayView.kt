@@ -3,23 +3,19 @@ package com.example.todoapp.view
 import android.content.Context
 import android.graphics.PixelFormat
 import android.os.Build
-import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.View
 import android.view.WindowManager
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.example.todoapp.R
-import com.example.todoapp.databinding.FragmentToDoBinding
 import com.example.todoapp.databinding.ToDoOverlayViewBinding
 
-class ToDoOverlayView(private val context: Context) {
+class ToDoOverlayView(context: Context) {
 
     private val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     private val layoutInflater =
         context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-    private val rootView = layoutInflater.inflate(R.layout.to_do_overlay_view, null)
+    private lateinit var binding: ToDoOverlayViewBinding
 
     private val windowParams = WindowManager.LayoutParams(
         0,
@@ -51,7 +47,7 @@ class ToDoOverlayView(private val context: Context) {
     ) {
         val dm = getCurrentDisplayMetrics()
         // We have to set gravity for which the calculated position is relative.
-        params.gravity = Gravity.TOP or Gravity.LEFT
+        params.gravity = Gravity.START or Gravity.TOP
         params.width = (widthInDp * dm.density).toInt()
         params.height = (heightInDp * dm.density).toInt()
         params.x = (dm.widthPixels - params.width) / 2
@@ -59,13 +55,16 @@ class ToDoOverlayView(private val context: Context) {
     }
 
     private fun initWindowParams() {
-        calculateSizeAndPosition(windowParams, 300, 80)
+        calculateSizeAndPosition(
+            windowParams,
+            300,
+            300
+        )
     }
 
-    private fun initWindow() {
-        // Using kotlin extension for views caused error, so good old findViewById is used
-       
-
+    private fun initWindow(): ConstraintLayout {
+        binding = ToDoOverlayViewBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     init {
@@ -73,22 +72,12 @@ class ToDoOverlayView(private val context: Context) {
         initWindow()
     }
 
-    fun open() {
-        try {
-            windowManager.addView(rootView, windowParams)
-        } catch (e: Exception) {
-            // Ignore exception for now, but in production, you should have some
-            // warning for the user here.
-        }
+    fun openOverlay() {
+        windowManager.addView(binding.root, windowParams)
     }
 
-    fun close() {
-        try {
-            windowManager.removeView(rootView)
-        } catch (e: Exception) {
-            // Ignore exception for now, but in production, you should have some
-            // warning for the user here.
-        }
+    fun closeOverlay() {
+        windowManager.removeView(binding.root)
     }
 
 }

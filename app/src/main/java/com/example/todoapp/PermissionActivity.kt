@@ -10,6 +10,8 @@ import android.provider.Settings
 import androidx.annotation.RequiresApi
 import com.example.todoapp.databinding.ActivityPermissionBinding
 import com.example.todoapp.service.INTENT_COMMAND_NOTE
+import com.example.todoapp.util.drawOverOtherAppsEnabled
+import com.example.todoapp.util.startToDoService
 
 const val PERMISSION_REQUEST_CODE = 1
 
@@ -65,7 +67,7 @@ class PermissionActivity : AppCompatActivity() {
             if (drawOverOtherAppsEnabled()) {
                 // The permission has been granted.
                 // Resend the last command - we have only one, so no additional logic needed.
-                startFloatingService(INTENT_COMMAND_NOTE)
+                startToDoService(INTENT_COMMAND_NOTE)
                 finish()
             }
         } else {

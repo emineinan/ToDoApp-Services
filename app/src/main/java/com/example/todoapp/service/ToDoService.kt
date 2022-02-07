@@ -1,17 +1,15 @@
 package com.example.todoapp.service
 
+import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
-import android.widget.Toast
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
-import com.example.todoapp.MainActivity
 import com.example.todoapp.R
-import com.example.todoapp.drawOverOtherAppsEnabled
-import com.example.todoapp.startPermissionActivity
+import com.example.todoapp.util.drawOverOtherAppsEnabled
+import com.example.todoapp.util.startPermissionActivity
 import com.example.todoapp.view.ToDoOverlayView
 
 const val INTENT_COMMAND = "com.localazy.quicknote.COMMAND"
@@ -25,22 +23,16 @@ private const val CODE_NOTE_INTENT = 3
 
 class ToDoService : Service() {
 
-
     override fun onBind(intent: Intent?): IBinder? = null
 
-
-    /**
-     * Remove the foreground notification and stop the service.
-     */
+    //Remove the foreground notification and stop the service.
     private fun stopService() {
         stopForeground(true)
         stopSelf()
     }
 
-
-    /**
-     * Create and show the foreground notification.
-     */
+    //Create and show the foreground notification.
+    @SuppressLint("LaunchActivityFromNotification")
     private fun showNotification() {
 
         val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -91,23 +83,22 @@ class ToDoService : Service() {
         ) {
             setTicker(null)
             setContentTitle(getString(R.string.app_name))
-            setContentText("Merhaba Bildirim")
+            setContentText(getString(R.string.todo_app_notification_text))
             setAutoCancel(false)
             setOngoing(true)
             setWhen(System.currentTimeMillis())
             setSmallIcon(R.drawable.ic_checklist)
-            priority = Notification.PRIORITY_DEFAULT
+            priority = Notification.PRIORITY_HIGH
             setContentIntent(notePendingIntent)
             addAction(
                 NotificationCompat.Action(
                     0,
-                    "Exit",
+                    getString(R.string.exit),
                     exitPendingIntent
                 )
             )
             startForeground(CODE_FOREGROUND_SERVICE, build())
         }
-
     }
 
 
@@ -133,11 +124,9 @@ class ToDoService : Service() {
                 startPermissionActivity()
             } else {
                 val toDoOverlayView = ToDoOverlayView(applicationContext)
-                toDoOverlayView.open()
+                toDoOverlayView.openOverlay()
             }
         }
-
         return START_STICKY
     }
-
 }
