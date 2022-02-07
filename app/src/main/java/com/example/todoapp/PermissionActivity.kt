@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -12,8 +13,6 @@ import com.example.todoapp.Constants.Companion.INTENT_COMMAND_ADD_TASK
 import com.example.todoapp.databinding.ActivityPermissionBinding
 import com.example.todoapp.util.drawOverOtherAppsEnabled
 import com.example.todoapp.util.startToDoService
-
-const val PERMISSION_REQUEST_CODE = 1
 
 class PermissionActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPermissionBinding
@@ -43,7 +42,6 @@ class PermissionActivity : AppCompatActivity() {
         }
     }
 
-
     @RequiresApi(Build.VERSION_CODES.M)
     private fun requestPermission() {
         val intent = Intent(
@@ -51,7 +49,7 @@ class PermissionActivity : AppCompatActivity() {
             Uri.parse("package:$packageName")
         )
         try {
-            startActivityForResult(intent, PERMISSION_REQUEST_CODE)
+            getResult.launch(intent)
         } catch (e: Exception) {
             showDialog(
                 getString(R.string.permission_error_title),
@@ -60,19 +58,15 @@ class PermissionActivity : AppCompatActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        // Don't check for resultCode == Activity.RESULT_OK because the overlay activity
-        // is closed with the back button and so the RESULT_CANCELLED is always received.
-        if (requestCode == PERMISSION_REQUEST_CODE) {
+    private val getResult =
+        registerForActivityResult(
+            StartActivityForResult()
+        ) {
             if (drawOverOtherAppsEnabled()) {
                 // The permission has been granted.
                 // Resend the last command - we have only one, so no additional logic needed.
                 startToDoService(INTENT_COMMAND_ADD_TASK)
                 finish()
             }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
         }
-    }
-
 }
