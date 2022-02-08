@@ -63,7 +63,6 @@ class PermissionActivity : AppCompatActivity() {
             StartActivityForResult()
         ) {
             if (drawOverOtherAppsEnabled()) {
-                // The permission has been granted.
                 // Resend the last command - we have only one, so no additional logic needed.
                 startToDoService(INTENT_COMMAND_ADD_TASK)
                 finish()

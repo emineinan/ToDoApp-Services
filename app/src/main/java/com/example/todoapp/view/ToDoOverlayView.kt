@@ -8,12 +8,13 @@ import android.os.Build
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.todoapp.data.model.ToDoData
 import com.example.todoapp.databinding.ToDoOverlayViewBinding
 import com.example.todoapp.viewmodel.ToDoViewModel
 
-class ToDoOverlayView(context: Context) {
+class ToDoOverlayView(private val context: Context) {
     private val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     private val layoutInflater =
         context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -83,10 +84,18 @@ class ToDoOverlayView(context: Context) {
     private fun addTaskToDatabase() {
         val title = binding.editTextOverlayTitle.text.toString()
         val description = binding.editTextOverlayDescription.text.toString()
-        val newTask = ToDoData(0, true, title, description)
-        toDoViewModel.insertData(newTask)
 
+        checkInputFields(title, description)
         clearInputFields()
+    }
+
+    private fun checkInputFields(title: String, description: String) {
+        if (title.isEmpty() || description.isEmpty()) {
+            Toast.makeText(context, "Please fill in the fields", Toast.LENGTH_LONG).show()
+        } else {
+            val newTask = ToDoData(0, true, title, description)
+            toDoViewModel.insertData(newTask)
+        }
     }
 
     private fun clearInputFields() {

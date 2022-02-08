@@ -50,16 +50,16 @@ class ToDoService : Service() {
 
         // From Android O, it's necessary to create a notification channel first.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                with(
-                    NotificationChannel(
-                        NOTIFICATION_CHANNEL_GENERAL,
-                        getString(R.string.notification_channel_general),
-                        NotificationManager.IMPORTANCE_DEFAULT
-                    )
-                ) {
-                    lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-                    manager.createNotificationChannel(this)
-                }
+            with(
+                NotificationChannel(
+                    NOTIFICATION_CHANNEL_GENERAL,
+                    getString(R.string.notification_channel_general),
+                    NotificationManager.IMPORTANCE_DEFAULT
+                )
+            ) {
+                lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+                manager.createNotificationChannel(this)
+            }
         }
 
         with(
@@ -92,18 +92,15 @@ class ToDoService : Service() {
         val command = intent.action
 
         // Exit the service if we receive the EXIT command.
-        // START_NOT_STICKY is important here, we don't want
-        // the service to be relaunched.
         if (command == INTENT_COMMAND_EXIT) {
             stopService()
+            //START_NOT_STICKY is important, we don't want the service to be relaunched.
             return START_NOT_STICKY
         }
 
-        // Be sure to show the notification first for all commands.
-        // Don't worry, repeated calls have no effects.
         showNotification()
 
-        // Show the floating window for adding a new note.
+        // Show the overlay for adding a new task.
         if (command == INTENT_COMMAND_ADD_TASK) {
             if (!drawOverOtherAppsEnabled()) {
                 startPermissionActivity()

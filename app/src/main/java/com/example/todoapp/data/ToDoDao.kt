@@ -6,7 +6,6 @@ import com.example.todoapp.data.model.ToDoData
 
 @Dao
 interface ToDoDao {
-
     @Query("SELECT * FROM todo_table ORDER BY id ASC")
     fun getAllData(): LiveData<List<ToDoData>>
 

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -51,10 +52,19 @@ class ToDoFragment : Fragment() {
     private fun addTaskToDatabase() {
         val title = binding.editTextTitle.text.toString()
         val description = binding.editTextDescription.text.toString()
-        val newTask = ToDoData(0, true, title, description)
-        toDoViewModel.insertData(newTask)
 
+        checkInputFields(title, description)
         clearInputFields()
+    }
+
+    private fun checkInputFields(title: String, description: String) {
+        if(title.isEmpty() || description.isEmpty()){
+            Toast.makeText(requireContext(), "Please fill in the fields", Toast.LENGTH_LONG).show()
+        }
+        else{
+            val newTask = ToDoData(0, true, title, description)
+            toDoViewModel.insertData(newTask)
+        }
     }
 
     private fun clearInputFields() {
