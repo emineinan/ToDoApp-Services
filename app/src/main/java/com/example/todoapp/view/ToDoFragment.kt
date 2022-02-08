@@ -8,9 +8,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.todoapp.R
 import com.example.todoapp.adapter.ToDoListAdapter
 import com.example.todoapp.data.model.ToDoData
 import com.example.todoapp.databinding.FragmentToDoBinding
+import com.example.todoapp.setDivider
 import com.example.todoapp.util.startToDoService
 import com.example.todoapp.util.stopToDoService
 import com.example.todoapp.viewmodel.ToDoViewModel
@@ -58,10 +60,9 @@ class ToDoFragment : Fragment() {
     }
 
     private fun checkInputFields(title: String, description: String) {
-        if(title.isEmpty() || description.isEmpty()){
+        if (title.isEmpty() || description.isEmpty()) {
             Toast.makeText(requireContext(), "Please fill in the fields", Toast.LENGTH_LONG).show()
-        }
-        else{
+        } else {
             val newTask = ToDoData(0, true, title, description)
             toDoViewModel.insertData(newTask)
         }
@@ -75,6 +76,7 @@ class ToDoFragment : Fragment() {
     private fun setAdapter() {
         val recyclerView = binding.recyclerViewTasks
         recyclerView.adapter = adapter
+        recyclerView.setDivider(R.drawable.recyclerview_divider)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         adapter.apply {
