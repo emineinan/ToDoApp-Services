@@ -4,6 +4,7 @@ import android.content.res.ColorStateList
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
@@ -37,27 +38,29 @@ fun changeHeaderText(view: TextView, isActive: Boolean) {
 @BindingAdapter("android:changeColor")
 fun changeColor(view: TextView, isActive: Boolean) {
     if (isActive) {
-        view.setTextColor(view.context.resources.getColor(R.color.black))
+        view.setTextColor(ContextCompat.getColor(view.context, R.color.darkGray))
     } else {
-        view.setTextColor(view.context.resources.getColor(R.color.lightGray))
+        view.setTextColor(ContextCompat.getColor(view.context, R.color.darkGray))
     }
 }
 
 @BindingAdapter("android:changeIconColor")
 fun changeIconColor(view: ImageView, isActive: Boolean) {
     if (isActive) {
-        view.setColorFilter(view.context.resources.getColor(R.color.darkGray))
+        view.setColorFilter(ContextCompat.getColor(view.context, R.color.darkGray))
     } else {
-        view.setColorFilter(view.context.resources.getColor(R.color.lightGray))
+        view.setColorFilter(ContextCompat.getColor(view.context, R.color.lightGray))
+        Toast.makeText(view.context, "Rengim değişti pasifim", Toast.LENGTH_SHORT).show()
     }
 }
 
 @BindingAdapter("android:changeTickIconColor")
 fun changeTickIconColor(view: CheckBox, isActive: Boolean) {
     if (isActive) {
-        view.buttonTintList = ColorStateList.valueOf(view.context.resources.getColor(R.color.green))
+        view.buttonTintList =
+            ColorStateList.valueOf(ContextCompat.getColor(view.context, R.color.green))
     } else {
         view.buttonTintList =
-            ColorStateList.valueOf(view.context.resources.getColor(R.color.lightGray))
+            ColorStateList.valueOf(ContextCompat.getColor(view.context, R.color.lightGray))
     }
 }
