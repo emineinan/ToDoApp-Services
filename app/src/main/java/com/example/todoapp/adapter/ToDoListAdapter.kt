@@ -13,7 +13,10 @@ import com.example.todoapp.databinding.RowItemBinding
 private const val ITEM_VIEW_TYPE_HEADER = 0
 private const val ITEM_VIEW_TYPE_ITEM = 1
 
-class ToDoListAdapter(var onItemClicked: ((item: ToDoData) -> Unit?)? = null) :
+class ToDoListAdapter(
+    var onItemTrashClicked: ((item: ToDoData) -> Unit?)? = null,
+    var onItemTickClicked: ((item: ToDoData) -> Unit?)? = null
+) :
     ListAdapter<DataItem, RecyclerView.ViewHolder>(ToDoDataDiffCallback()) {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -23,7 +26,15 @@ class ToDoListAdapter(var onItemClicked: ((item: ToDoData) -> Unit?)? = null) :
                 holder.bind(toDoDataItem.toDoData)
 
                 holder.binding.imageViewDelete.setOnClickListener {
-                    onItemClicked?.invoke(toDoDataItem.toDoData)
+                    onItemTrashClicked?.invoke(toDoDataItem.toDoData)
+                }
+
+                holder.binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        onItemTickClicked?.invoke(toDoDataItem.toDoData)
+                    } else {
+                        onItemTickClicked?.invoke(toDoDataItem.toDoData)
+                    }
                 }
             }
 

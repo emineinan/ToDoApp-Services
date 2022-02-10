@@ -23,14 +23,16 @@ class ToDoViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun deleteOrUpdateData(toDoData: ToDoData) {
+    fun deleteData(toDoData: ToDoData) {
         viewModelScope.launch(Dispatchers.IO) {
-            if (toDoData.isActive) {
-                toDoData.isActive = false
-                repository.updateData(toDoData)
-            } else {
-                repository.deleteData(toDoData)
-            }
+            repository.deleteData(toDoData)
+        }
+    }
+
+    fun updateData(toDoData: ToDoData) {
+        viewModelScope.launch(Dispatchers.IO) {
+            toDoData.isActive = !toDoData.isActive
+            repository.updateData(toDoData)
         }
     }
 }

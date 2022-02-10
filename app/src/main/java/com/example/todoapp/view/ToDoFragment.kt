@@ -1,9 +1,11 @@
 package com.example.todoapp.view
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -13,6 +15,7 @@ import com.example.todoapp.adapter.ToDoListAdapter
 import com.example.todoapp.data.model.ToDoData
 import com.example.todoapp.databinding.FragmentToDoBinding
 import com.example.todoapp.setDivider
+import com.example.todoapp.util.hideKeyboard
 import com.example.todoapp.util.startToDoService
 import com.example.todoapp.util.stopToDoService
 import com.example.todoapp.viewmodel.ToDoViewModel
@@ -38,6 +41,7 @@ class ToDoFragment : Fragment() {
 
         binding.buttonAddTask.setOnClickListener {
             addTaskToDatabase()
+            it.hideKeyboard()
         }
 
         binding.switchActiveOrPassive.setOnCheckedChangeListener { view, isChecked ->
@@ -80,8 +84,11 @@ class ToDoFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         adapter.apply {
-            onItemClicked = { currentItem ->
-                toDoViewModel.deleteOrUpdateData(currentItem)
+            onItemTrashClicked = { currentItem ->
+                toDoViewModel.deleteData(currentItem)
+            }
+            onItemTickClicked = { currentItem ->
+                toDoViewModel.updateData(currentItem)
             }
         }
     }
