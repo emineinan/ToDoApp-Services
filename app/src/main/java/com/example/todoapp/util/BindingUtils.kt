@@ -38,7 +38,7 @@ fun changeHeaderText(view: TextView, isActive: Boolean) {
 @BindingAdapter("android:changeColor")
 fun changeColor(view: TextView, isActive: Boolean) {
     if (isActive) {
-        view.setTextColor(ContextCompat.getColor(view.context, R.color.darkGray))
+        view.setTextColor(ContextCompat.getColor(view.context, R.color.lightGray))
     } else {
         view.setTextColor(ContextCompat.getColor(view.context, R.color.darkGray))
     }

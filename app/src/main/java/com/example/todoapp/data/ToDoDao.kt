@@ -12,9 +12,12 @@ interface ToDoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertData(toDoData: ToDoData)
 
-    @Update
-    suspend fun updateData(toDoData: ToDoData)
+    /*@Update
+    suspend fun updateData(toDoData: ToDoData)*/
 
     @Delete
     suspend fun deleteData(toDoData: ToDoData)
+
+    @Query("UPDATE todo_table SET isActive=:isActive WHERE id=:id")
+    fun updateData(isActive: Boolean, id: Int)
 }

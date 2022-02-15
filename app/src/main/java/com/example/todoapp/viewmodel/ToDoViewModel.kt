@@ -29,10 +29,16 @@ class ToDoViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun updateData(toDoData: ToDoData) {
+    fun updateData(isActive: Boolean, id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            toDoData.isActive = !toDoData.isActive
-            repository.updateData(toDoData)
+            repository.updateData(isActive, id)
         }
     }
+
+    /* fun updateData(toDoData: ToDoData) {
+         viewModelScope.launch(Dispatchers.IO) {
+             toDoData.isActive = !toDoData.isActive
+             repository.updateData(toDoData)
+         }
+     }*/
 }

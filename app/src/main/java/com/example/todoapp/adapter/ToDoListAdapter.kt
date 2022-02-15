@@ -30,11 +30,10 @@ class ToDoListAdapter(
                 }
 
                 holder.binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
-                    if (isChecked) {
-                        onItemTickClicked?.invoke(toDoDataItem.toDoData)
-                    } else {
-                        onItemTickClicked?.invoke(toDoDataItem.toDoData)
-                    }
+                    onItemTickClicked?.invoke(toDoDataItem.toDoData.apply {
+                        isActive=!isChecked
+                    })
+
                 }
             }
 
