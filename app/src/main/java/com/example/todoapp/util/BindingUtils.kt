@@ -50,7 +50,6 @@ fun changeIconColor(view: ImageView, isActive: Boolean) {
         view.setColorFilter(ContextCompat.getColor(view.context, R.color.darkGray))
     } else {
         view.setColorFilter(ContextCompat.getColor(view.context, R.color.lightGray))
-        Toast.makeText(view.context, "Rengim değişti pasifim", Toast.LENGTH_SHORT).show()
     }
 }
 
